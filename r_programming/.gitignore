@@ -1,2 +1,3 @@
 specdata/
 *.csv
+.gitignore
