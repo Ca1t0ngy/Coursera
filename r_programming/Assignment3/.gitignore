@@ -1,2 +1,4 @@
 *.pdf
-*.csv
+*.cs
+*.DS_Store
+*.RHistory
