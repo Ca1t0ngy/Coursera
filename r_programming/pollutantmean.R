@@ -9,7 +9,7 @@ pollutantmean <- function(directory, pollutant, id = 1:332){
         
         ## 'id'
         
-        ## R eturn
+        ## Return
         
        total <- 0
        total_length <- 0        

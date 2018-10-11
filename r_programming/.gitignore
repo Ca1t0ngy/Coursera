@@ -1,3 +1,4 @@
 specdata/
 *.csv
 !.gitignore
+*.DS_Store
