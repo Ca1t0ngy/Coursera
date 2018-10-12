@@ -1,4 +1,5 @@
 specdata/
 *.csv
 !.gitignore
-*.DS_Store
+*.DS_Stor
+data_cleaning/
