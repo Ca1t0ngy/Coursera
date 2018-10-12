@@ -1,5 +1,6 @@
 specdata/
 *.csv
-!.gitignore
-*.DS_Stor
+*.gitignore
+*.RData
+*.Rhistory
 data_cleaning/
