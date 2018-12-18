@@ -2,19 +2,21 @@
 ## Course 3: Getting and Clearning Data 
 ## Week 4 Project 
 
+library("dplyr")
+
 # Set work directory
-setwd("ENTER YOUR PATH HERE/week4_project")
+setwd("/Users/caitongy/Desktop/week4_project")
 
 # Files path 
-file_features <- "../Dataset4/features.txt"
-file_activity_labels<- "../Dataset4/activity_labels.txt"
+file_features <- "UCI HAR Dataset/features.txt"
+file_activity_labels<- "UCI HAR Dataset/activity_labels.txt"
 
-file_subject_test <- "../Dataset4/test/subject_test.txt"
-file_X_test <- "../Dataset4/test/X_test.txt"
-file_y_test <- "../Dataset4/test/y_test.txt"
-file_subject_train <- "../Dataset4/train/subject_train.txt"
-file_X_train <- "../Dataset4/train/X_train.txt"
-file_y_train <- "../Dataset4/train/y_train.txt"
+file_subject_test <- "UCI HAR Dataset/test/subject_test.txt"
+file_X_test <- "UCI HAR Dataset/test/X_test.txt"
+file_y_test <- "UCI HAR Dataset/test/y_test.txt"
+file_subject_train <- "UCI HAR Dataset/train/subject_train.txt"
+file_X_train <- "UCI HAR Dataset/train/X_train.txt"
+file_y_train <- "UCI HAR Dataset/train/y_train.txt"
 
 # Load file 
 features <- read.table(file_features)
