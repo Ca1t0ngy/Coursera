@@ -3,7 +3,7 @@
 ## Week 4 Project 
 
 # Set work directory
-setwd("/Users/caitongy/Respository/datasciencecoursera/cleaning_data/week4_project")
+setwd("ENTER YOUR PATH HERE/week4_project")
 
 # Files path 
 file_features <- "../Dataset4/features.txt"

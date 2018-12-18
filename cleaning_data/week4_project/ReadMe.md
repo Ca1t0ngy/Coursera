@@ -23,3 +23,8 @@ The R script run_analysis.R  does the following.
 - From the data set in step 4, creates a second, independent tidy data set with the average of each variable for each activity and each subject.
 
 ### How to run the script
+1. Create a **new folder week4_project** on you desktop (or anywhere you want) 
+2. Download the **data** from the link above, unzip the file, and place it under week4_project
+3. Download the script **Data_Analysis.R** and make sure it is in the same folder as the unzipped data folder
+4. Change the **path** for work directory in the script 
+5. Run the script 
