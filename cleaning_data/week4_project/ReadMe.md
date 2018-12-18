@@ -1,6 +1,6 @@
 ## Coursera R Clearning Data Project
 ### Introduction
-This folder contains threes files:
+This folder contains three files:
 
 - Data_Analysis.R : R script for data cleaning 
 - CodeBook.md : Describes the variables, the data, and any transformations or work that performed to clean up the data 
