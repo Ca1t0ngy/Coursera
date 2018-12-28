@@ -18,14 +18,15 @@ from warmUpExercise import warmUpExercise
 
 
 def pause():
-    programPause = input("Press the <ENTER> key to continue ...")
+    programPause = input('Program paused. Press enter to continue.')
 
 
 ## ==================== Part 1: Basic Function ====================
 # Complete warmUpExercise.m
-print('Running warmUpExercise ... ');
-print('5x5 Identity Matrix: ');
-warmUpExercise()
+print('Running warmUpExercise ... ')
+Matrix = warmUpExercise()
 
-print('Program paused. Press enter to continue.');
-pause();
+print('5x5 Identity Matrix: ')
+print(Matrix)
+
+pause()
