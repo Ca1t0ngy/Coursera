@@ -12,12 +12,14 @@
 ## Initialization
 import os
 import sys
-import numpy as np
+from numpy import *
+import scipy.linalg
+
 from matplotlib import pyplot as plt
 
-from warmUpExercise import warmUpExercise
-from plotData import plotData
-from computeCost import computeCost
+from warmUpExercise import *
+from plotData import *
+from computeCost import *
 
 def pause():
     programPause = input('Program paused. Press enter to continue.')
@@ -35,7 +37,7 @@ pause()
 
 ## ======================= Part 2: Plotting =======================
 print('Plotting Data ...')
-data = np.loadtxt('ex1data1.txt', delimiter = ',');
+data = loadtxt('ex1data1.txt', delimiter = ',');
 X = data[:, 0]; y = data[:, 1];
 m = len(y); # number of training examples
 # Plot Data
@@ -44,25 +46,25 @@ plotData(X,y)
 pause()
 
 ## =================== Part 3: Cost and Gradient descent ===================
-X = np.zeros((m, 2))
-X[:, 0] = np.ones(m) # Add a column of ones to x
+X = zeros((m, 2))
+X[:, 0] = ones(m) # Add a column of ones to x
 X[:, 1] = data[:, 0]
 
-theta = np.zeros((2, 1)); # initialize fitting parameters
+theta = zeros((2, 1)) # initialize fitting parameters
 
 # Some gradient descent settings
-iterations = 1500;
-alpha = 0.01;
+iterations = 1500
+alpha = 0.01
 
 print('Testing the cost function ...')
 # compute and display initial cost; refer to computeCost
 J = computeCost(X, y, theta);
 print('With theta = [0 ; 0]\nCost computed = {0:.2f}'.format(J));
 print('Expected cost value (approx) 32.07');
-
 pause();
 # further testing of the cost function
-theta = np.array([[-1], [2]])
+
+theta = array([[-1], [2]])
 J = computeCost(X, y, theta);
 print('With theta = [-1 ; 2]\nCost computed = {0:.2f}'.format(J));
 print('Expected cost value (approx) 54.24');
@@ -71,14 +73,15 @@ print('Program paused. Press enter to continue.');
 
 """
 print('Running Gradient Descent ...')
-% run gradient descent
+# run gradient descent; refer to gradientDescent
 theta = gradientDescent(X, y, theta, alpha, iterations);
 
-% print theta to screen
-fprintf('Theta found by gradient descent:\n');
-fprintf('%f\n', theta);
-fprintf('Expected theta values (approx)\n');
-fprintf(' -3.6303\n  1.1664\n\n');
+# print theta to screen
+print('Theta found by gradient descent:');
+print('{0:.4f}'.format(theta));
+print('Expected theta values (approx)');
+print(' -3.6303\n  1.1664');
+
 
 % Plot the linear fit
 hold on; % keep previous plot visible
