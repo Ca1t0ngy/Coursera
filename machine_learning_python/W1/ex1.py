@@ -12,14 +12,15 @@
 ## Initialization
 import os
 import sys
-from numpy import *
+import numpy as np
 import scipy.linalg
-
-from matplotlib import pyplot as plt
+import matplotlib.pyplot as plt
+import matplotlib.cm as cm
 
 from warmUpExercise import *
 from plotData import *
 from computeCost import *
+from gradientDescent import *
 
 def pause():
     programPause = input('Program paused. Press enter to continue.')
@@ -37,9 +38,10 @@ pause()
 
 ## ======================= Part 2: Plotting =======================
 print('Plotting Data ...')
-data = loadtxt('ex1data1.txt', delimiter = ',');
-X = data[:, 0]; y = data[:, 1];
-m = len(y); # number of training examples
+data = loadtxt('ex1data1.txt', delimiter = ',')
+X = data[:, 0]
+y = data[:, 1]
+m = len(y) # number of training examples
 # Plot Data
 # Note: refer to plotData.py
 plotData(X,y)
@@ -57,46 +59,70 @@ iterations = 1500
 alpha = 0.01
 
 print('Testing the cost function ...')
-# compute and display initial cost; refer to computeCost
-J = computeCost(X, y, theta);
-print('With theta = [0 ; 0]\nCost computed = {0:.2f}'.format(J));
-print('Expected cost value (approx) 32.07');
-pause();
+# compute and display initial cost refer to computeCost
+J = computeCost(X, y, theta)
+print('With theta = [0  0]\nCost computed = {0:.2f}'.format(J))
+print('Expected cost value (approx) 32.07')
+pause()
 # further testing of the cost function
+J = computeCost(X, y, np.array([[-1], [2]]))
+print('With theta = [-1  2]\nCost computed = {0:.2f}'.format(J))
+print('Expected cost value (approx) 54.24')
 
-theta = array([[-1], [2]])
-J = computeCost(X, y, theta);
-print('With theta = [-1 ; 2]\nCost computed = {0:.2f}'.format(J));
-print('Expected cost value (approx) 54.24');
-
-print('Program paused. Press enter to continue.');
-
-"""
+print('Program paused. Press enter to continue.')
 print('Running Gradient Descent ...')
-# run gradient descent; refer to gradientDescent
-theta = gradientDescent(X, y, theta, alpha, iterations);
+
+# run gradient descent refer to gradientDescent
+theta, J = gradientDescent(X, y, theta, alpha, iterations)
 
 # print theta to screen
-print('Theta found by gradient descent:');
-print('{0:.4f}'.format(theta));
-print('Expected theta values (approx)');
-print(' -3.6303\n  1.1664');
+print('Theta found by gradient descent:')
+print('{0:.4f} \n {1:.4f}'.format(theta[0][0], theta[1][0]))
+print('Expected theta values (approx)')
+print(' -3.6303\n  1.1664')
 
+# Plot the linear fit
+plt.plot(X[:,1], X.dot(theta), 'r-')
+plt.legend(['Training data', 'Linear regression'])
+plt.show()
+pause()
 
-% Plot the linear fit
-hold on; % keep previous plot visible
-plot(X(:,2), X*theta, '-')
-legend('Training data', 'Linear regression')
-hold off % don't overlay any more plots on this figure
+# Predict values for population sizes of 35,000 and 70,000
+predict1 = np.array([1, 3.5]).dot(theta)
+# should be around 4519
+print('For population = 35,000, we predict a profit of {}'.format(predict1*10000))
+predict2 = np.array([1, 7]).dot(theta)
+# should be around 45342
+print('For population = 70,000, we predict a profit of {}'.format(predict2*10000))
 
-% Predict values for population sizes of 35,000 and 70,000
-predict1 = [1, 3.5] *theta;
-fprintf('For population = 35,000, we predict a profit of %f\n',...
-    predict1*10000);
-predict2 = [1, 7] * theta;
-fprintf('For population = 70,000, we predict a profit of %f\n',...
-    predict2*10000);
+## ============= Part 4: Visualizing J(theta_0, theta_1) =============
+print('Visualizing J(theta_0, theta_1) ...')
 
-fprintf('Program paused. Press enter to continue.\n');
-pause;
-"""
+# Grid over which we will calculate J
+theta0_vals = np.linspace(-10, 10, 100)
+theta1_vals = np.linspace(-1, 4, 100)
+
+# initialize J_vals to a matrix of 0's
+J_vals = np.zeros((len(theta0_vals), len(theta1_vals)))
+
+# Fill out J_vals
+for i in range(len(theta0_vals)):
+    for j in range(len(theta1_vals)):
+        t = np.array([[theta0_vals[i]], [theta1_vals[j]]])
+        J_vals[i,j] = computeCost(X, y, t)
+
+'''
+# Surface plot
+plt.contour(theta0_vals, theta1_vals, J_vals)
+plt.xlabel('theta_0')
+plt.ylabel('theta_1')
+plt.show()
+'''
+# Contour plot
+
+# Plot J_vals as 15 contours spaced logarithmically between 0.01 and 100
+plt.contour(theta0_vals, theta1_vals, J_vals, logspace(-2, 3, 20))
+plt.xlabel('theta_0')
+plt.ylabel('theta_1')
+plt.plot(theta[0], theta[1], 'rx')
+plt.show()

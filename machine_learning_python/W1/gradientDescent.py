@@ -1,36 +1,25 @@
-def [theta, J_history] = gradientDescent(X, y, theta, alpha, num_iters):
-    
-%GRADIENTDESCENT Performs gradient descent to learn theta
-%   theta = GRADIENTDESCENT(X, y, theta, alpha, num_iters) updates theta by
-%   taking num_iters gradient steps with learning rate alpha
+from numpy import *
+from computeCost import computeCost
 
-% Initialize some useful values
-m = length(y); % number of training examples
-J_history = zeros(num_iters, 1);
-for iter = 1:num_iters
+def gradientDescent(X, y, theta, alpha, num_iters):
+    # Initialize some useful values
+    m = len(y) # number of training examples
+    J_history = zeros([num_iters, 1])
+    for iter in range(num_iters):
+        sum = zeros([2,1])
+        for i in range(m):
+            sum[0][0] = sum[0][0] + (theta[0][0]+ theta[1][0]*X[i][1] - y[i])
+            sum[1][0] = sum[1][0] + (theta[0][0]+ theta[1][0]*X[i][1] - y[i])*X[i][1]
+        theta[0][0] = theta[0][0] - sum[0][0]*alpha/m
+        theta[1][0] = theta[1][0] - sum[1][0]*alpha/m
+        J_history[iter] = computeCost(X, y, theta)
 
-    % ====================== YOUR CODE HERE ======================
-    % Instructions: Perform a single gradient step on the parameter vector
-    %               theta.
-    %
-    % Hint: While debugging, it can be useful to print out the values
-    %       of the cost function (computeCost) and gradient here.
-    %
-    sum = [0;0];
-    for i = 1:m
-        sum(1,1)= sum(1,1) + (theta(1,1)+ theta(2,1)*X(i,2) - y(i,1));
-        sum(2,1) = sum(2,1) + (theta(1,1)+ theta(2,1)*X(i,2) - y(i,1))*X(i,2);
-    end
+    return theta, J_history
 
-    theta(1,1) = theta(1,1) - sum(1,1)*alpha/m;
-    theta(2,1) = theta(2,1) - sum(2,1)*alpha/m;
-
-    % ============================================================
-
-    % Save the cost J in every iteration
-    J_history(iter) = computeCost(X, y, theta);
-
-
-end
-
-end
+if __name__ == "__main__":
+    X = array([[1, 5], [1, 2], [1, 4], [1, 5]])
+    y = array([[1], [6], [4], [2]])
+    theta = zeros([2, 1])
+    alpha = 0.01
+    num_iters = 1000
+    print(gradientDescent(X, y, theta, alpha, num_iters))

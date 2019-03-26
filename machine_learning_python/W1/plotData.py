@@ -7,4 +7,4 @@ def plotData(x, y):
     plt.plot(x, y, 'bo', markersize = 5)         # Plot the data
     plt.ylabel('Profit in $10,000s')             # Set the y-axis label
     plt.xlabel('Population of City in 10,000s')  # Set the x-axis label
-    plt.show()                                   # Show the plot
+                                     # Show the plot
