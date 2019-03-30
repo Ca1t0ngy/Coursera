@@ -15,7 +15,8 @@ import sys
 import numpy as np
 import scipy.linalg
 import matplotlib.pyplot as plt
-import matplotlib.cm as cm
+from matplotlib import cm
+from mpl_toolkits.mplot3d import Axes3D
 
 from warmUpExercise import *
 from plotData import *
@@ -111,15 +112,14 @@ for i in range(len(theta0_vals)):
         t = np.array([[theta0_vals[i]], [theta1_vals[j]]])
         J_vals[i,j] = computeCost(X, y, t)
 
-'''
 # Surface plot
-plt.contour(theta0_vals, theta1_vals, J_vals)
-plt.xlabel('theta_0')
-plt.ylabel('theta_1')
+fig = plt.figure()
+ax = fig.gca(projection='3d')
+surf = ax.plot_surface(theta0_vals, theta1_vals, J_vals, cmap=cm.coolwarm,
+                       linewidth=0, antialiased=False)
 plt.show()
-'''
-# Contour plot
 
+# Contour plot
 # Plot J_vals as 15 contours spaced logarithmically between 0.01 and 100
 plt.contour(theta0_vals, theta1_vals, J_vals, logspace(-2, 3, 20))
 plt.xlabel('theta_0')
