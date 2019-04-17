@@ -245,7 +245,7 @@ activity$date &lt;- as.Date(activity$date)</code></pre>
 steps_per_day &lt;- aggregate(steps ~ date, activity, sum)
 
 # 2 - Histogram
-png(filename=&quot;1_Histogram1&quot;)
+png(filename=&quot;1_Histogram1.png&quot;)
 hist(steps_per_day$steps, breaks=10, col=&quot;blue&quot;, main=&quot;Total Steps Per day&quot;, 
      xlab=&quot;Steps&quot;, ylab = &quot;Frequency&quot;  )
 dev.off()</code></pre>
@@ -268,7 +268,7 @@ steps_mean</code></pre>
 steps_by_interval &lt;- aggregate(steps ~ interval, activity, mean)
 
 # 2 - Time series plot
-png(filename=&quot;2_TimeSeries&quot;)
+png(filename=&quot;2_TimeSeries.png&quot;)
 plot(steps_by_interval$interval, steps_by_interval$steps, type=&quot;l&quot;, 
      xlab=&quot;Interval&quot;, ylab=&quot;Number of steps&quot;, 
      main=&quot;Average number of steps per day by interval&quot;)
@@ -300,7 +300,7 @@ sum(is.na(imputed_activity))</code></pre>
 <pre><code>## [1] 0</code></pre>
 <pre class="r"><code># 3 - New histogram
 new_steps_per_day &lt;- aggregate(steps ~ date, imputed_activity, sum)
-png(filename=&quot;3_Histogram2&quot;)
+png(filename=&quot;3_Histogram2.png&quot;)
 hist(new_steps_per_day$steps, breaks=10, col=&quot;blue&quot;, xlab=&quot;Steps&quot;, ylab=&quot;Frequency&quot;, 
      main=&quot;Total Steps Per Day after imputation&quot;)
 dev.off()</code></pre>
@@ -327,7 +327,7 @@ imputed_activity &lt;- mutate(imputed_activity, wdays=ifelse(weekdays(date)==&qu
 imputed_activity &lt;- aggregate(steps ~ interval + wdays, imputed_activity, mean)
 
 # 3 - Panel plot 
-png(filename=&quot;4_PanelPlot&quot;)
+png(filename=&quot;4_PanelPlot.png&quot;)
 xyplot(steps ~ interval | wdays, imputed_activity, type=&quot;l&quot;, layout=(c(1, 2)), xlab=&quot;Interval&quot;, ylab=&quot;number of steps&quot;)
 dev.off()</code></pre>
 <pre><code>## quartz_off_screen 

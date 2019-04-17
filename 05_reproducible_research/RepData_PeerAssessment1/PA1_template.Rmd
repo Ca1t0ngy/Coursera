@@ -36,7 +36,7 @@ activity$date <- as.Date(activity$date)
 steps_per_day <- aggregate(steps ~ date, activity, sum)
 
 # 2 - Histogram
-png(filename="1_Histogram1")
+png(filename="1_Histogram1.png")
 hist(steps_per_day$steps, breaks=10, col="blue", main="Total Steps Per day", 
      xlab="Steps", ylab = "Frequency"  )
 dev.off()
@@ -56,7 +56,7 @@ steps_median
 steps_by_interval <- aggregate(steps ~ interval, activity, mean)
 
 # 2 - Time series plot
-png(filename="2_TimeSeries")
+png(filename="2_TimeSeries.png")
 plot(steps_by_interval$interval, steps_by_interval$steps, type="l", 
      xlab="Interval", ylab="Number of steps", 
      main="Average number of steps per day by interval")
@@ -86,7 +86,7 @@ sum(is.na(imputed_activity))
 
 # 3 - New histogram
 new_steps_per_day <- aggregate(steps ~ date, imputed_activity, sum)
-png(filename="3_Histogram2")
+png(filename="3_Histogram2.png")
 hist(new_steps_per_day$steps, breaks=10, col="blue", xlab="Steps", ylab="Frequency", 
      main="Total Steps Per Day after imputation")
 dev.off()
@@ -111,7 +111,7 @@ imputed_activity <- mutate(imputed_activity, wdays=ifelse(weekdays(date)=="Satur
 imputed_activity <- aggregate(steps ~ interval + wdays, imputed_activity, mean)
 
 # 3 - Panel plot 
-png(filename="4_PanelPlot")
+png(filename="4_PanelPlot.png")
 xyplot(steps ~ interval | wdays, imputed_activity, type="l", layout=(c(1, 2)), xlab="Interval", ylab="number of steps")
 dev.off()
 ```
