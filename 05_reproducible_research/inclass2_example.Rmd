@@ -1,0 +1,76 @@
+---
+title: "inclass_example"
+output: html_document
+---
+# Data splitting
+```{r}
+library(caret);library(kernlab);data(spam)
+inTrain <- createDataPartition(y=spam$type, p = 0.75, list=FALSE)
+training <- spam[inTrain, ]
+testing <- spam[-inTrain,]
+dim(training)
+
+set.seed(32323)
+folds <- createFolds(y=spam$type, k = 10, list=TRUE, returnTrain = TRUE)
+sapply(folds, length)
+folds[[1]][1:10]
+
+set.seed(32323)
+folds <- createFolds(y=spam$type, k = 10, list=TRUE, returnTrain = FALSE)
+sapply(folds, length)
+folds[[1]][1:10]
+folds
+
+set.seed(32323)
+folds <- createResample(y=spam$type, times=10, list=TRUE)
+sapply(folds, length)
+folds[[1]][1:10]
+
+set.seed(32323)
+tme <- 1:1000
+folds <- createTimeSlices(y=tme, initialWindow = 20,
+                          horizon = 10)
+names(folds)
+```
+
+# Plotting predictors
+```{r}
+
+```
+
+
+
+# Predicting with Regression Multiple Covariates
+```{r}
+library(ISLR);library(ggplot2);library(caret);
+data(Wage); Wage <- subset(Wage, select=-c(logwage))
+summary(Wage)
+
+inTrain <- createDataPartition(y=Wage$wage, p=0.7, list=FALSE)
+training <- Wage[inTrain, ]; testing <- Wage[-inTrain,]
+dim(training);dim(testing)
+
+featurePlot(x=training[, c("age", "education", "jobclass")],
+            y = training$wage,
+            plot="pairs")
+
+qplot(age, wage, data=training, col=education)
+
+modFit <- train(wage ~ age + jobclass + education,
+                method = "lm", data=training)
+fitMod <- modFit$finalModel
+print(modFit)
+
+plot(fitMod, 1, pch=19, cex=0.5, col="#00000010")
+
+qplot(fitMod$fitted, fitMod$residuals, col=race, data=training)
+
+plot(fitMod$residuals, pch=19)
+
+pred <- predict(modFit, testing)
+qplot(wage, pred, col=year, data=testing)
+
+modFitAll<- train(wage ~ ., data=training, method ="lm")
+pred <- predict(modFitAll, testing)
+qplot(wage, pred, data=testing)
+```
