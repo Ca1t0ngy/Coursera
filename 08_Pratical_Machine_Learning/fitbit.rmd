@@ -1,0 +1,211 @@
+---
+title: "Ranking the exercise"
+author: "Caitong YE"
+date: "5/9/2019"
+output:
+  html_document: default
+  pdf_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Sypnosis 
+
+In these project, I build a classification model to predict the rank of an action 
+using the human activity recognition data set. 
+
+During the selection of model, I compared two classification algorithm, decision tree and random forest. 
+
+I also compared the model without preprocessing and with preprocessing using Princinple 
+Component Analyses. And investigate the impact of the number of regressors used to
+build the model on the outcome of the prediction.
+
+```{r, echo=FALSE, cache=TRUE, eval=FALSE}
+# load libraries
+library(ggplot2)
+library(caret)
+library(rpart)
+library(randomForest)
+library(FactoMineR)
+library(factoextra)
+
+# load data 
+datTrain <- read.csv('~/Desktop/pml-training.csv')
+datTest <- read.csv('~/Desktop/pml-testing.csv')
+# data info
+# str(datTrain)
+# str(datTest)
+# summary(datTrain$classe)
+# names(datTrain)
+
+# subset data with 12 variables and the classe
+vars <- c('roll_belt', 'pitch_belt', 'yaw_belt', 'roll_arm', 'pitch_arm', 'yaw_arm',
+          'roll_dumbbell', 'pitch_dumbbell', 'yaw_dumbbell', 'roll_forearm', 
+          'pitch_forearm', 'yaw_forearm', 'classe')
+datTraining <- datTrain[vars]
+sum(is.na(datTraining))
+
+# Create data partition 
+set.seed(12123)
+inTrain <- createDataPartition(datTraining$classe, p = 0.7, list=FALSE)
+training <- datTraining[inTrain,]
+testing <- datTraining[-inTrain,]
+
+# data preprocessing
+# normalize training data 
+trainingScaled <- scale(training[,-13])
+res.pca <- prcomp(trainingScaled[,-13])
+fviz_eig(res.pca, addlabels = TRUE)
+
+eig.val <- get_eigenvalue(res.pca)
+eig.val
+
+# normalize cross-validation data 
+mns <- lapply(training[,-13], mean)
+stds <- lapply(training[,-13], sd)
+testingScaled <- (testing[, -13] - mns)/stds
+
+# train model - CART
+fitCART <- train(classe ~ ., method='rpart', data=training)
+fitCART
+pred <- predict(fitCART, testing)
+accu <- sum(pred==testing$classe)/length(pred)
+table(observed=testing$classe, predicted=pred)
+
+# train model - Random Forest
+fitRF <- train(classe ~ ., method = 'rf', data=training)
+fitRF
+pred <- predict(fitRF, testing)
+accu <- sum(pred==testing$classe)/length(pred)
+table(observed=testing$classe, predicted=pred)
+
+# train model with pca
+train.data <- data.frame(classe=training$classe, res.pca$x)
+# only the first 6 dimension 
+train.data8 <- train.data[, 1:9]
+# only the first 4 dimension 
+train.data6 <- train.data[, 1:7]
+# model - rpart
+modFit8 <- train(classe ~., method='rpart', train.data8)
+modFit8 
+
+# model - random forest with 8 and 6 regressors
+modFit8 <- train(classe ~., method='rf', train.data8)
+modFit8
+modFit6 <- train(classe ~., method='rf', train.data6)
+modFit6
+
+# cross-validation 8 vars
+test.data <- predict(res.pca, testingScaled[,-13])
+test.data8 <- test.data[, 1:8]
+test.data8 <- data.frame(test.data8)
+pred <- predict(modFit8, test.data8)
+accu <- sum(pred==testing$classe)/length(pred)
+table(observed=testing$classe, predicted=pred)
+
+# cross-validaiton 6 vars
+test.data6 <- test.data[, 1:6]
+test.data6 <- data.frame(test.data6)
+pred <- predict(modFit6, test.data6)
+accu <- sum(pred==testing$classe)/length(pred)
+table(observed=testing$classe, predicted=pred)
+
+# nomalizing final testing data
+datTesting <- datTest[vars[-13]]
+datTestingScaled <- (datTesting - mns)/stds
+test <- predict(res.pca, datTestingScaled)
+
+# predict on test data 
+# 6 variables
+pred6 <- predict(modFit6, test)
+pred6
+# 18/20, 90%
+
+# 8 variables
+pred8 <- predict(modFit8, test)
+pred8 
+# 19/20, 95% 
+
+diff <- 1 - sum(pred6==pred8)/length(pred6)
+
+
+```
+
+# 1 - Data preparation 
+
+After loading the data, the training data has 19622 obervations of 160 variables.
+
+- There are many missing values in the data set so first of all we will select all the 
+variables that doesn't have missing values.
+
+- The action related variables can be regroup into 4 categories: 
+
+                                - belt 
+                                - arm
+                                - dumbbell
+                                - forearm
+  with each variable a roll, pitch, yaw measurement and their derives. 
+  So we have our first 12 variables. 
+
+# 2 - Data partition 
+
+Partition the training data into subgroup of training and testing with  a 
+porportion of 0.7 and 0.3 respectively.
+
+# 3 - Model training 
+
+## Model 1 - decision tree 
+
+Build a decision tree model using the training data and do a cross validation on 
+the testing data. The accuracy rate during training and cross-validation is under 50%.
+So this model lack of complexity for our data set. 
+
+## Model 2 - random forest 
+
+Considering for a more complex model, random forest seems a valide choice for its 
+high accuray in classification problem. 
+
+Though the apparent disadvantage is that it took more time to train the model 
+(more 15 mins in my case), the accuracy on the training set turned out to be 98%. 
+So if not for more exigent threshhold, I will stick with random forest model.
+
+## Model 3 - with data preprocessing 
+
+Although the random forest model with raw regressors works fine. But is it possible to simply the model by doing some preprocessiong and dimension reduction?
+
+This time, normalize the data set with 12 variables and do a PCA. The plot of 
+eigenvalues and their cumulative variance percentage shows that 8 variables are 
+needed in order to get a 90% total variance, and with 6 variabls a 80% total variance 
+
+We will test these two strategies.
+
+First, test with 6 regressors. The decision tree model has a even lower accuracy which is 
+not very surprising. The accuracy of the random forest model on the training set reduced by 10%
+but still very promising with 88% accuracy. And the cross-validation yielded 
+an accuracy rate of 91%.
+
+Secondly, test with 8 regressors. I skipped the decision tree model because 
+it is predictable that the model would be very high biasd. 
+
+The result given by the random forest model showed a 91% accuracy rate, with 94%
+accuracy on the testing set. The decrease in accuracy is within our expectation 
+because with fewer regressors we lost a part of the representation of variance in 
+the data set. 
+
+So if i'm not mistaken during the process, the accuracy during cross-validation is higher
+than during the training which is not common. 
+
+# 4 - Prediction on the test set
+
+With the help of the final quiz, I obtained 100% (20/20) accuracy rate with random forest model 
+using all regressors without data preprocessing. 
+
+The random forest model with 8 regressors has an 95% (19/20) accuracy rate, and the 
+model with 6 regressors 90% (18/20) accuracy rate.
+
+# 5 - Code 
+
+```{r ref.label=knitr::all_labels(), echo = T, eval = T}
+```

@@ -1,0 +1,58 @@
+---
+title: "assignment_week2"
+output: html_document
+---
+# Q1
+```{r}
+library(AppliedPredictiveModeling)
+data(AlzheimerDisease)
+summary(diagnosis)
+summary(predictors)
+```
+
+# Q2
+```{r}
+library(ggplot2);library(caret);library(AppliedPredictiveModeling);
+library(Hmisc)
+data(concrete)
+library(caret)
+set.seed(1000)
+inTrain = createDataPartition(mixtures$CompressiveStrength, p = 3/4)[[1]]
+training = mixtures[ inTrain,]
+testing = mixtures[-inTrain,]
+qplot(rownames(mixtures), mixtures$CompressiveStrength, data=mixtures,
+      col=colnames(mixtures))
+
+```
+
+# Q3
+```{r}
+library(AppliedPredictiveModeling)
+data(concrete)
+library(caret)
+set.seed(1000)
+inTrain = createDataPartition(mixtures$CompressiveStrength, p = 3/4)[[1]]
+training = mixtures[ inTrain,]
+testing = mixtures[-inTrain,]
+
+hist(mixtures$Superplasticizer)
+```
+
+# Q4
+
+```{r}
+library(caret)
+library(AppliedPredictiveModeling)
+set.seed(3433)data(AlzheimerDisease)
+adData = data.frame(diagnosis,predictors)
+inTrain = createDataPartition(adData$diagnosis, p = 3/4)[[1]]training = adData[ inTrain,]
+testing = adData[-inTrain,]
+
+
+```
+
+
+
+
+
+
