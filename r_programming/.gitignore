@@ -1,0 +1,6 @@
+specdata/
+*.csv
+*.gitignore
+*.RData
+*.Rhistory
+data_cleaning/
