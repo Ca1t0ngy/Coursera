@@ -1,0 +1,48 @@
+---
+title: "Bank Recommendation"
+author: "Caitong YE"
+date: "5/14/2019"
+output:
+  ioslides_presentation: default
+  slidy_presentation: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, fig.width = 12, fig.height = 8)
+```
+
+
+## Introduction
+
+We all have concerns our bank accounts. Do they charge too much comparing to others.
+What are the best products to invest in or does the product have high yield rate. 
+
+A web application is here to answer all your questions at once with informative 
+and esthetical graphs as well as interactive search panel catering to your tastes
+
+
+## Introduction
+
+This web app is developped using the popular data analysis language R and its 
+web development package Shiny.
+
+For this paticular demo, a small data set is used. 
+
+```{r, echo=FALSE}
+recommendation <- read.csv(file="recommendation.csv", header = TRUE, stringsAsFactors = FALSE)
+recommendation
+```
+
+## Dashboard
+
+![](img/dashboard.png){width=90%}
+
+
+## Search panel 
+
+![](img/search.png){width=90%}
+
+## Thanks
+
+This project is inspired by https://github.com/amrrs/sample_revenue_dashboard_shiny
+
